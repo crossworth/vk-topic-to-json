@@ -1,7 +1,9 @@
-package main
+package vk_topic_to_json
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"net/url"
 	"strconv"
 
@@ -79,10 +81,7 @@ func SaveTopic(client *vkapi.VKClient, groupID int, topicID int) (Topic, error) 
 	topic.CreatedBy = vkUserToProfile(profilesUsers[topicResult.Topics[0].CreatedBy])
 	topic.UpdatedAt = topicResult.Topics[0].Updated
 	topic.UpdatedBy = vkUserToProfile(profilesUsers[topicResult.Topics[0].UpdatedBy])
-
-	if topic.Profiles == nil {
-		topic.Profiles = make(map[int]Profile)
-	}
+	topic.Profiles = make(map[int]Profile)
 
 	commentsParams := url.Values{}
 	commentsParams.Set("extended", "1")
@@ -177,7 +176,12 @@ func vkCommentToComment(comment vkapi.TopicComment) Comment {
 		case "video":
 			cmt.Attachments = append(cmt.Attachments, fmt.Sprintf("https://vk.com/video?z=video%d_%d%%2F%s", comment.Attachments[i].Video.OwnerID, comment.Attachments[i].Video.ID, comment.Attachments[i].Video.AccessKey))
 		case "audio":
-			cmt.Attachments = append(cmt.Attachments, comment.Attachments[i].Audio.Url)
+			output, err := json.Marshal(comment.Attachments[i].Audio)
+			if err != nil {
+				continue
+			}
+
+			cmt.Attachments = append(cmt.Attachments, string(output))
 		}
 	}
 

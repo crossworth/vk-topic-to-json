@@ -9,8 +9,9 @@ import (
 	"strconv"
 
 	vkapi "github.com/himidori/golang-vk-api"
-)
 
+	topicToJSON "github.com/crossworth/vk-topic-to-json"
+)
 
 func main() {
 	email := flag.String("email", "", "Seu email do VK")
@@ -51,7 +52,7 @@ func main() {
 		log.Fatalf("O ID do tópico não é válido, %v", err)
 	}
 
-	topic, err := SaveTopic(client, groupIDInt, topicIDInt)
+	topic, err := topicToJSON.SaveTopic(client, groupIDInt, topicIDInt)
 
 	output, err := json.Marshal(topic)
 	if err != nil {
