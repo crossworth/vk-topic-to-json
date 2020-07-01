@@ -3,7 +3,6 @@ package vk_topic_to_json
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/url"
 	"strconv"
 
@@ -11,53 +10,53 @@ import (
 )
 
 type Profile struct {
-	ID         int    `json:"id" bson:"id"`
-	FirstName  string `json:"first_name" bson:"first_name"`
-	LastName   string `json:"last_name" bson:"last_name"`
-	ScreenName string `json:"screen_name" bson:"screen_name"`
-	Photo      string `json:"photo" bson:"photo"`
+	ID         int    `json:"id"`
+	FirstName  string `json:"first_name"`
+	LastName   string `json:"last_name"`
+	ScreenName string `json:"screen_name"`
+	Photo      string `json:"photo"`
 }
 
 type Comment struct {
-	ID          int      `json:"id" bson:"id"`
-	FromID      int      `json:"from_id" bson:"from_id"`
-	Date        int64    `json:"date" bson:"date"`
-	Text        string   `json:"text" bson:"text"`
-	Likes       int      `json:"likes" bson:"likes"`
-	ReplyToUID  int      `json:"reply_to_uid" bson:"reply_to_uid"`
-	ReplyToCID  int      `json:"reply_to_cid" bson:"reply_to_cid"`
-	Attachments []string `json:"attachments" bson:"attachments"`
+	ID          int      `json:"id"`
+	FromID      int      `json:"from_id"`
+	Date        int64    `json:"date"`
+	Text        string   `json:"text"`
+	Likes       int      `json:"likes"`
+	ReplyToUID  int      `json:"reply_to_uid"`
+	ReplyToCID  int      `json:"reply_to_cid"`
+	Attachments []string `json:"attachments"`
 }
 
 type Poll struct {
-	ID       int          `json:"id" bson:"id"`
-	Question string       `json:"question" bson:"question"`
-	Votes    int          `json:"votes" bson:"votes"`
-	Answers  []PollAnswer `json:"answers" bson:"answers"`
-	Multiple bool         `json:"multiple" bson:"multiple"`
-	EndDate  int64        `json:"end_date" bson:"end_date"`
-	Closed   bool         `json:"closed" bson:"closed"`
+	ID       int          `json:"id"`
+	Question string       `json:"question"`
+	Votes    int          `json:"votes"`
+	Answers  []PollAnswer `json:"answers"`
+	Multiple bool         `json:"multiple"`
+	EndDate  int64        `json:"end_date"`
+	Closed   bool         `json:"closed"`
 }
 
 type PollAnswer struct {
-	ID    int     `json:"id" bson:"id"`
-	Text  string  `json:"text" bson:"text"`
-	Votes int     `json:"votes" bson:"votes"`
-	Rate  float64 `json:"rate" bson:"rate"`
+	ID    int     `json:"id"`
+	Text  string  `json:"text"`
+	Votes int     `json:"votes"`
+	Rate  float64 `json:"rate"`
 }
 
 type Topic struct {
-	ID        int             `json:"id" bson:"id"`
-	Title     string          `json:"title" bson:"title"`
-	IsClosed  bool            `json:"is_closed" bson:"is_closed"`
-	IsFixed   bool            `json:"is_fixed" bson:"is_fixed"`
-	CreatedAt int64           `json:"created_at" bson:"created_at"`
-	UpdatedAt int64           `json:"updated_at" bson:"updated_at"`
-	CreatedBy Profile         `json:"created_by" bson:"created_by"`
-	UpdatedBy Profile         `json:"updated_by" bson:"updated_by"`
-	Profiles  map[int]Profile `json:"profiles" bson:"profiles"`
-	Poll      Poll            `json:"poll" bson:"poll"`
-	Comments  []Comment       `json:"comments" bson:"comments"`
+	ID        int             `json:"id"`
+	Title     string          `json:"title"`
+	IsClosed  bool            `json:"is_closed"`
+	IsFixed   bool            `json:"is_fixed"`
+	CreatedAt int64           `json:"created_at"`
+	UpdatedAt int64           `json:"updated_at"`
+	CreatedBy Profile         `json:"created_by"`
+	UpdatedBy Profile         `json:"updated_by"`
+	Profiles  map[int]Profile `json:"profiles"`
+	Poll      Poll            `json:"poll"`
+	Comments  []Comment       `json:"comments"`
 }
 
 func SaveTopic(client *vkapi.VKClient, groupID int, topicID int) (Topic, error) {
@@ -176,6 +175,8 @@ func vkCommentToComment(comment vkapi.TopicComment) Comment {
 		case "video":
 			cmt.Attachments = append(cmt.Attachments, fmt.Sprintf("https://vk.com/video?z=video%d_%d%%2F%s", comment.Attachments[i].Video.OwnerID, comment.Attachments[i].Video.ID, comment.Attachments[i].Video.AccessKey))
 		case "audio":
+			// NOTE(Pedro): we save the JSON
+			// since we dont have a good way to "make" a audio link
 			output, err := json.Marshal(comment.Attachments[i].Audio)
 			if err != nil {
 				continue
