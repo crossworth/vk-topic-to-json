@@ -1,7 +1,7 @@
 ### VK Topic to JSON
 Save a VK Topic to a JSON backup
 
-####How to use
+#### How to use
 This is a command line app, you must call it with following arguments
 
 *Unix*
