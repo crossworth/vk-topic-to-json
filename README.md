@@ -1,5 +1,5 @@
-### VK Topic to JSON
-Save a VK Topic to a JSON backup
+### VK Board Topic to JSON
+Save a VK Board Topic to a JSON file
 
 #### How to use
 This is a command line app, you must call it with following arguments
