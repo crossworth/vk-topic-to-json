@@ -3,7 +3,6 @@ package vk_topic_to_json
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/url"
 	"strconv"
 
