@@ -3,6 +3,7 @@ package vk_topic_to_json
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/url"
 	"strconv"
 
@@ -86,11 +87,11 @@ func SaveTopic(client *vkapi.VKClient, groupID int, topicID int) (Topic, error) 
 	commentsParams.Set("extended", "1")
 	commentsParams.Set("need_likes", "1")
 
-	if len(topic.Comments) > 0 {
-		params.Set("start_comment_id", strconv.Itoa(len(topic.Comments)))
-	}
-
 	for {
+		if len(topic.Comments) > 0 {
+			commentsParams.Set("start_comment_id", strconv.Itoa(topic.Comments[len(topic.Comments)-1].ID))
+		}
+
 		comments, err := client.BoardGetComments(groupID, topicID, 100, commentsParams)
 		if err != nil {
 			return topic, err
