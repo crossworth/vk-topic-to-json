@@ -21,4 +21,10 @@ https://vk.com/topic-203040506_40506070
                      |GROUP  ||TOPIC  |
 ```
 
+You can pass a url as well
+
+```batch
+vk-topic-to-json-windows-amd64.exe -email=YOUR_VK_EMAIL -password=YOUR_VK_PASSWORD -url=https://vk.com/topic-203040506_40506070
+```
+
 In this case the *group* is **203040506** and the *topic* is **40506070**.
